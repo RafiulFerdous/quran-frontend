@@ -3,7 +3,7 @@
 import { useSettings } from "@/context/SettingsContext";
 import { Ayah, Pagination } from "@/types/quran";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import SearchBar from "@/components/SearchBar";
 
 interface SearchResultsProps {
@@ -12,6 +12,7 @@ interface SearchResultsProps {
   query: string;
   currentPage: number;
   error?: boolean;
+  loading?: boolean;
 }
 
 const fontMap: Record<string, string> = {
@@ -20,7 +21,7 @@ const fontMap: Record<string, string> = {
   scheherazade: "Scheherazade, 'Traditional Arabic', serif",
 };
 
-export default function SearchResults({ results, pagination, query, currentPage, error }: SearchResultsProps) {
+export default function SearchResults({ results, pagination, query, currentPage, error, loading }: SearchResultsProps) {
   const { arabicFont, arabicFontSize, translationFontSize } = useSettings();
   const [mounted, setMounted] = useState(false);
 
@@ -28,22 +29,33 @@ export default function SearchResults({ results, pagination, query, currentPage,
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!loading && results.length > 0) {
+      window.scrollTo(0, 0);
+    }
+  }, [results, loading]);
+
   const fontFamily = fontMap[arabicFont] || fontMap.amiri;
 
   return (
-    <>
+    <div>
       <SearchBar />
       
       <header className="mb-6 lg:mb-8">
         <h1 className="text-lg lg:text-2xl font-bold">
           Search results for: <span className="text-emerald-600">"{query}"</span>
         </h1>
-        {!error && pagination.total > 0 && (
+        {!error && !loading && pagination.total > 0 && (
           <p className="text-zinc-500 text-sm lg:text-base">{pagination.total} results found</p>
         )}
       </header>
 
-      {error ? (
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-zinc-500">Searching...</p>
+        </div>
+      ) : error ? (
         <p className="text-red-500 mt-4">Failed to perform search. Please try again.</p>
       ) : results.length === 0 ? (
         <div className="text-center py-12 lg:py-20">
@@ -56,7 +68,7 @@ export default function SearchResults({ results, pagination, query, currentPage,
               key={`${ayah.surahId}-${ayah.numberInSurah}`}
               className="p-4 lg:p-6 bg-white dark:bg-zinc-900 rounded-xl lg:rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm"
             >
-              <div className="flex justify-between items-center mb-2 lg:mb-4">
+              <div className="flex justify-between items-start mb-2 lg:mb-4">
                 <div className="flex flex-col">
                   <Link 
                     href={`/surah/${ayah.surahId}`}
@@ -90,7 +102,7 @@ export default function SearchResults({ results, pagination, query, currentPage,
         </div>
       )}
 
-      {pagination.totalPages > 1 && (
+      {pagination.totalPages > 1 && !loading && (
         <div className="mt-8 lg:mt-12 flex justify-center gap-2">
           {currentPage > 1 && (
             <Link
@@ -113,6 +125,6 @@ export default function SearchResults({ results, pagination, query, currentPage,
           )}
         </div>
       )}
-    </>
+    </div>
   );
 }
