@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quran App - Al-Quran Al-Kareem
+
+A modern Quran application built with Next.js and Tailwind CSS, featuring Arabic text display with multiple font options, translations, and responsive design.
+
+## Features
+
+### Core Functionality
+- **Browse all 114 Surahs** of the Holy Quran
+- **Read full Surah** with Arabic text and translations
+- **Search verses** by keywords
+- **Infinite scroll** for Surah list pagination
+
+### Settings Panel
+- **Arabic Font Selection**: Choose from 3 fonts:
+  - Amiri (default)
+  - Nastaliq
+  - Scheherazade
+- **Arabic Font Size**: Adjustable (16px - 64px)
+- **Translation Font Size**: Adjustable (12px - 32px)
+- **Persistent Settings**: All settings saved to localStorage
+
+### Responsive Design
+- Full-screen responsive navbar
+- Content centered on screen
+- Sidebar slides in from left
+- Mobile-friendly layouts
+
+## Tech Stack
+
+- **Framework**: Next.js 16
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **API**: Quran API (external)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
-npm run dev
+# Clone the repository
+git clone <repository-url>
+cd quran-frontend
+
+# Install dependencies
+npm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Start development server
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+### Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Build for production
+npm run build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Start production server
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+quran-frontend/
+├── app/
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx           # Home page (Surah list)
+│   ├── globals.css        # Global styles
+│   ├── search/           # Search page
+│   │   └── page.tsx
+│   └── surah/[id]/      # Surah detail page
+│       └── page.tsx
+├── components/
+│   ├── Navbar.tsx         # Navigation bar
+│   ├── SettingsSidebar.tsx # Settings panel
+│   ├── SurahList.tsx     # Surah list with infinite scroll
+│   ├── SurahCard.tsx      # Individual Surah card
+│   ├── SurahView.tsx     # Surah detail view
+│   ├── SurahPageClient.tsx # Client wrapper
+│   ├── SearchBar.tsx      # Search input
+│   └── Providers.tsx      # Context providers
+├── context/
+│   └── SettingsContext.tsx # Settings state management
+├── lib/
+│   └── api.ts           # API integration
+└── types/
+    └── quran.ts        # TypeScript types
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optional API URL override:
+
+```env
+NEXT_PUBLIC_API_URL=https://quran-api-y23k.onrender.com/api
+```
+
+Default API: `https://quran-api-y23k.onrender.com/api`
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home - Browse all Surahs |
+| `/surah/[id]` | Read Surah with translation |
+| `/search?q={query}` | Search verses |
+
+## License
+
+MIT
