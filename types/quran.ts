@@ -14,6 +14,8 @@ export interface Ayah {
   textArabic: string;
   textTranslation: string;
   textTransliterated?: string;
+  surahNameEnglish?: string;
+  surahNameTransliterated?: string;
 }
 
 export interface Pagination {

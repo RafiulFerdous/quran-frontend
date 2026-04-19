@@ -93,7 +93,15 @@ export async function searchAyat(
 
   const result = await response.json();
   return {
-    data: result.data.map((a: ApiAyah) => mapAyah(a, 0)),
+    data: (result.results || []).map((a: any) => ({
+      id: `${a.surahNumber}-${a.verseInSurah}`,
+      surahId: a.surahNumber,
+      numberInSurah: a.verseInSurah,
+      textArabic: a.textArabic,
+      textTranslation: a.textTranslation,
+      surahNameEnglish: a.surahNameEnglish,
+      surahNameTransliterated: a.surahNameTransliterated,
+    })),
     pagination: result.pagination,
   };
 }
